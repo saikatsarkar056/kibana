@@ -12,6 +12,7 @@ import { AliasTypeRequiredParameters } from './alias_type';
 import { TokenCountTypeRequiredParameters } from './token_count_type';
 import { ScaledFloatTypeRequiredParameters } from './scaled_float_type';
 import { DenseVectorRequiredParameters } from './dense_vector_type';
+import { SemanticTextRequiredParameters } from './semantic_text_type';
 
 export interface ComponentProps {
   allFields: NormalizedFields['byId'];
@@ -22,6 +23,7 @@ const typeToParametersFormMap: { [key in DataType]?: ComponentType<any> } = {
   token_count: TokenCountTypeRequiredParameters,
   scaled_float: ScaledFloatTypeRequiredParameters,
   dense_vector: DenseVectorRequiredParameters,
+  semantic_text: SemanticTextRequiredParameters,
 };
 
 export const getRequiredParametersFormForType = (

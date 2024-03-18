@@ -59,6 +59,7 @@ export type MainType =
   | 'shape'
   | 'search_as_you_type'
   | 'sparse_vector'
+  | 'semantic_text'
   | 'date'
   | 'date_nanos'
   | 'geo_point'
