@@ -8,7 +8,8 @@
 import React from 'react';
 
 import { i18n } from '@kbn/i18n';
-import { FormRow } from '../../../../../shared_imports';
+import { FormRow, UseField, Field } from '../../../../../shared_imports';
+import { getFieldConfig } from '../../../../../lib';
 
 export const SemanticTextRequiredParameters = () => {
   return (
@@ -20,6 +21,13 @@ export const SemanticTextRequiredParameters = () => {
           })}
         </h3>
       }
-    ></FormRow>
+    >
+      <UseField
+        path="reference_field"
+        config={getFieldConfig('reference_field')}
+        component={Field}
+      />
+      <UseField path="inference_id" config={getFieldConfig('inference_id')} component={Field} />
+    </FormRow>
   );
 };

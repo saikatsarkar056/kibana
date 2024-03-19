@@ -1041,6 +1041,7 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
     },
     schema: t.number,
   },
+
   dims: {
     fieldConfig: {
       defaultValue: '',
@@ -1067,6 +1068,60 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
     },
     schema: t.string,
   },
+  reference_field: {
+    fieldConfig: {
+      defaultValue: '',
+      type: FIELD_TYPES.NUMBER,
+      label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.referenceFieldLabel', {
+        defaultMessage: 'Reference field',
+      }),
+      helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.referenceFieldHelpText', {
+        defaultMessage: 'Reference field for model inference.',
+      }),
+      formatters: [toInt],
+      validations: [
+        {
+          validator: emptyField(
+            i18n.translate(
+              'xpack.idxMgmt.mappingsEditor.parameters.validations.referenceFieldIsRequiredErrorMessage',
+              {
+                defaultMessage: 'Select an existing reference field.',
+              }
+            )
+          ),
+        },
+      ],
+    },
+    schema: t.string,
+  },
+
+  inference_id: {
+    fieldConfig: {
+      defaultValue: '',
+      type: FIELD_TYPES.NUMBER,
+      label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdLabel', {
+        defaultMessage: 'Inference ID',
+      }),
+      helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdHelpText', {
+        defaultMessage: 'Inference id for a machine learning model.',
+      }),
+      formatters: [toInt],
+      validations: [
+        {
+          validator: emptyField(
+            i18n.translate(
+              'xpack.idxMgmt.mappingsEditor.parameters.validations.inferenceIdIsRequiredErrorMessage',
+              {
+                defaultMessage: 'Select an inference Id for a machine learning model.',
+              }
+            )
+          ),
+        },
+      ],
+    },
+    schema: t.string,
+  },
+
   relations: {
     fieldConfig: {
       defaultValue: [] as any, // Needed for FieldParams typing

@@ -155,6 +155,8 @@ export type ParameterName =
   | 'points_only'
   | 'path'
   | 'dims'
+  | 'inference_id'
+  | 'reference_field'
   | 'depth_limit'
   | 'relations'
   | 'max_shingle_size'
