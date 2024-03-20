@@ -874,7 +874,7 @@ export const TYPE_DEFINITION: { [key in DataType]: DataTypeDefinition } = {
     }),
     value: 'semantic_text',
     documentation: {
-      main: 'sparse-vector.html',
+      main: 'semantic-text.html',
     },
     description: () => (
       <p>
