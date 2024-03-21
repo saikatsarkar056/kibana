@@ -5,10 +5,10 @@
  * 2.0.
  */
 
-import React, { useReducer, createContext, useContext } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 
 import { reducer } from './reducer';
-import { State, Dispatch } from './types';
+import { Dispatch, State } from './types';
 
 const StateContext = createContext<State | undefined>(undefined);
 const DispatchContext = createContext<Dispatch | undefined>(undefined);

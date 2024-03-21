@@ -44,8 +44,6 @@ import { documentationService } from '../../../../services';
 import { updateIndexMappings } from '../../../../services/api';
 import { notificationService } from '../../../../services/notification';
 
-import { useComponentTemplatesContext } from '../../../../components/component_templates/component_templates_context';
-
 export const DetailsPageMappingsContent: FunctionComponent<{
   index: Index;
   data: string;
@@ -57,7 +55,6 @@ export const DetailsPageMappingsContent: FunctionComponent<{
     core: { getUrlForApp },
   } = useAppContext();
 
-  const { api } = useComponentTemplatesContext();
   const [addFieldComponent, hideAddFieldComponent] = useState<boolean>(false);
   const state = useMappingsState();
   const dispatch = useDispatch();
@@ -116,7 +113,6 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   useMappingsStateListener({ value: parsedDefaultValue, status: 'disabled' });
 
   const addFieldButtonOnClick = useCallback(async () => {
-    // const models = await api.getInferenceModels();
     hideAddFieldComponent(!addFieldComponent);
 
     // reset unsaved mappings and change status to create field

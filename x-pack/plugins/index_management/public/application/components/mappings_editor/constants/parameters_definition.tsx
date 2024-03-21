@@ -1094,30 +1094,16 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
     },
     schema: t.string,
   },
-
   inference_id: {
     fieldConfig: {
-      defaultValue: '',
-      type: FIELD_TYPES.NUMBER,
       label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdLabel', {
         defaultMessage: 'Inference ID',
       }),
       helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdHelpText', {
         defaultMessage: 'Inference id for a machine learning model.',
       }),
-      formatters: [toInt],
-      validations: [
-        {
-          validator: emptyField(
-            i18n.translate(
-              'xpack.idxMgmt.mappingsEditor.parameters.validations.inferenceIdIsRequiredErrorMessage',
-              {
-                defaultMessage: 'Select an inference Id for a machine learning model.',
-              }
-            )
-          ),
-        },
-      ],
+      defaultValue: INDEX_DEFAULT,
+      validations: analyzerValidations,
     },
     schema: t.string,
   },
