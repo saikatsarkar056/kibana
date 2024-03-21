@@ -5,11 +5,11 @@
  * 2.0.
  */
 
-import React, { FunctionComponent, useCallback, useMemo, useState } from 'react';
 import {
   EuiAccordion,
   EuiButton,
   EuiCodeBlock,
+  EuiEmptyPrompt,
   EuiFlexGroup,
   EuiFlexItem,
   EuiIcon,
@@ -19,31 +19,33 @@ import {
   EuiSpacer,
   EuiText,
   EuiTitle,
-  EuiEmptyPrompt,
   useGeneratedHtmlId,
 } from '@elastic/eui';
 import { css } from '@emotion/react';
+import React, { FunctionComponent, useCallback, useMemo, useState } from 'react';
 
-import { FormattedMessage } from '@kbn/i18n-react';
 import { i18n } from '@kbn/i18n';
+import { FormattedMessage } from '@kbn/i18n-react';
 import { Index } from '../../../../../../common';
 import { useAppContext } from '../../../../app_context';
+import { DocumentFields } from '../../../../components/mappings_editor/components';
 import { DocumentFieldsSearch } from '../../../../components/mappings_editor/components/document_fields/document_fields_search';
 import { FieldsList } from '../../../../components/mappings_editor/components/document_fields/fields';
 import { SearchResult } from '../../../../components/mappings_editor/components/document_fields/search_fields';
-import { extractMappingsDefinition } from '../../../../components/mappings_editor/lib';
+import { deNormalize, extractMappingsDefinition } from '../../../../components/mappings_editor/lib';
 import { MappingsEditorParsedMetadata } from '../../../../components/mappings_editor/mappings_editor';
 import {
   useDispatch,
   useMappingsState,
 } from '../../../../components/mappings_editor/mappings_state_context';
+import { NormalizedFields } from '../../../../components/mappings_editor/types';
 import { useMappingsStateListener } from '../../../../components/mappings_editor/use_state_listener';
 import { documentationService } from '../../../../services';
-import { DocumentFields } from '../../../../components/mappings_editor/components';
-import { deNormalize } from '../../../../components/mappings_editor/lib';
 import { updateIndexMappings } from '../../../../services/api';
 import { notificationService } from '../../../../services/notification';
-import { NormalizedFields } from '../../../../components/mappings_editor/types';
+
+import { useComponentTemplatesContext } from '../../../../components/component_templates/component_templates_context';
+
 export const DetailsPageMappingsContent: FunctionComponent<{
   index: Index;
   data: string;
@@ -55,6 +57,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
     core: { getUrlForApp },
   } = useAppContext();
 
+  const { api } = useComponentTemplatesContext();
   const [addFieldComponent, hideAddFieldComponent] = useState<boolean>(false);
   const state = useMappingsState();
   const dispatch = useDispatch();
@@ -112,7 +115,8 @@ export const DetailsPageMappingsContent: FunctionComponent<{
 
   useMappingsStateListener({ value: parsedDefaultValue, status: 'disabled' });
 
-  const addFieldButtonOnClick = useCallback(() => {
+  const addFieldButtonOnClick = useCallback(async () => {
+    // const models = await api.getInferenceModels();
     hideAddFieldComponent(!addFieldComponent);
 
     // reset unsaved mappings and change status to create field

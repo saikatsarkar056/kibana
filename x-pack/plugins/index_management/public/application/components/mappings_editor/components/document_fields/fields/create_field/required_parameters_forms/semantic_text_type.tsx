@@ -6,10 +6,9 @@
  */
 
 import React from 'react';
-
 import { i18n } from '@kbn/i18n';
-import { FormRow, UseField, Field } from '../../../../../shared_imports';
 import { getFieldConfig } from '../../../../../lib';
+import { Field, FormRow, UseField } from '../../../../../shared_imports';
 
 export const SemanticTextRequiredParameters = () => {
   return (
