@@ -5,13 +5,14 @@
  * 2.0.
  */
 
-import React from 'react';
 import { i18n } from '@kbn/i18n';
+import React from 'react';
+import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
+import { PARAMETERS_OPTIONS, STANDARD } from '../../../../../constants';
 import { getFieldConfig } from '../../../../../lib';
 import { Field, FormRow, UseField } from '../../../../../shared_imports';
-import { PARAMETERS_OPTIONS, STANDARD } from '../../../../../constants';
+import { SelectOption, SuperSelectOption } from '../../../../../types';
 import { InferenceIdSelects } from '../../../field_parameters/inference_id_selects';
-import { SuperSelectOption, SelectOption } from '../../../../../types';
 
 export interface MapOptionsToSubOptions {
   [key: string]: {
@@ -20,14 +21,13 @@ export interface MapOptionsToSubOptions {
   };
 }
 
-const ANALYZER_OPTIONS = PARAMETERS_OPTIONS.analyzer!;
 const fieldConfig = getFieldConfig('inference_id');
-const fieldConfigWithLabel = fieldConfig;
-const analyzerOptions = ANALYZER_OPTIONS;
+const analyzerOptions = PARAMETERS_OPTIONS.analyzer!;
 
 const fieldOptions = [...analyzerOptions] as SuperSelectOption[];
 
 export const SemanticTextRequiredParameters = () => {
+  const { api } = useComponentTemplatesContext();
   return (
     <FormRow
       title={
@@ -44,14 +44,17 @@ export const SemanticTextRequiredParameters = () => {
         component={Field}
       />
 
-      <UseField path="inference_id" config={fieldConfigWithLabel}>
+      <UseField path="inference_id" config={fieldConfig}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticText">
             <InferenceIdSelects
-              onChange={field.setValue}
+              onChange={async (value) => {
+                const inferenceModels = await api.getInferenceModels();
+                field.setValue(value);
+              }}
               mainDefaultValue={STANDARD}
               subDefaultValue={STANDARD}
-              config={fieldConfigWithLabel}
+              config={fieldConfig}
               options={fieldOptions}
             />
           </div>

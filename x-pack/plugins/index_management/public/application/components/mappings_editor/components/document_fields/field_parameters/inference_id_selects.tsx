@@ -5,29 +5,26 @@
  * 2.0.
  */
 
-import React, { useEffect, useCallback } from 'react';
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
+import React, { useCallback, useEffect } from 'react';
 
 import {
-  useForm,
-  Form,
-  UseField,
-  SuperSelectField,
   FieldConfig,
   FieldHook,
+  Form,
   FormDataProvider,
+  SuperSelectField,
+  UseField,
+  useForm,
 } from '../../../shared_imports';
-import { SelectOption, SuperSelectOption } from '../../../types';
-import { useComponentTemplatesContext } from '../../../../component_templates/component_templates_context';
-
-type Options = SuperSelectOption[] | SelectOption[];
+import { SuperSelectOption } from '../../../types';
 
 interface Props {
   onChange(value: unknown): void;
   mainDefaultValue: string | undefined;
   subDefaultValue: string | undefined;
   config: FieldConfig;
-  options: Options;
+  options: SuperSelectOption[];
   'data-test-subj'?: string;
 }
 
@@ -52,20 +49,9 @@ export const InferenceIdSelects = ({
     return subscription.unsubscribe;
   }, [subscribe, onChange]);
 
-  const { api } = useComponentTemplatesContext();
+  const onMainValueChange = useCallback(async (mainValue: unknown) => {}, []);
 
-  const onMainValueChange = useCallback(
-    async (mainValue: unknown) => {
-      const inferenceModels = await api.getInferenceModels();
-      // console.log('+++++++++++++++');
-      // console.log(inferenceModels);
-      // console.log('==============');
-      // console.log(options);
-    },
-    [api]
-  );
-
-  const renderSelect = (field: FieldHook, opts: Options) => {
+  const renderSelect = (field: FieldHook, opts: SuperSelectOption[]) => {
     return (
       <SuperSelectField
         field={field}
