@@ -11,10 +11,10 @@ import { useComponentTemplatesContext } from '../../../../../../component_templa
 import { getFieldConfig } from '../../../../../lib';
 import { FormRow, UseField } from '../../../../../shared_imports';
 import { SuperSelectOption } from '../../../../../types';
-import { InferenceIdSelects as ModelIdSelects } from '../../../field_parameters/inference_id_selects';
+import { ModelIdSelects } from '../../../field_parameters/model_id_selects';
 
 const fieldConfigReferenceField = getFieldConfig('reference_field');
-const fieldConfigModelId = getFieldConfig('inference_id');
+const fieldConfigModelId = getFieldConfig('model_id');
 
 const referenceFieldOptions: SuperSelectOption[] = [
   { value: 'body-content', inputDisplay: 'body-content' },
@@ -63,7 +63,7 @@ export const SemanticTextRequiredParameters = () => {
         )}
       </UseField>
 
-      <UseField path="inference_id" config={fieldConfigModelId}>
+      <UseField path="model_id" config={fieldConfigModelId}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticText">
             <ModelIdSelects

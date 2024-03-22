@@ -1079,7 +1079,7 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
     },
     schema: t.string,
   },
-  inference_id: {
+  model_id: {
     fieldConfig: {
       label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdLabel', {
         defaultMessage: 'Inference ID',

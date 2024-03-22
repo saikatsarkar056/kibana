@@ -155,7 +155,7 @@ export type ParameterName =
   | 'points_only'
   | 'path'
   | 'dims'
-  | 'inference_id'
+  | 'model_id'
   | 'reference_field'
   | 'depth_limit'
   | 'relations'
