@@ -6,9 +6,8 @@
  */
 
 import { i18n } from '@kbn/i18n';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
-import { PARAMETERS_OPTIONS, STANDARD } from '../../../../../constants';
 import { getFieldConfig } from '../../../../../lib';
 import { Field, FormRow, UseField } from '../../../../../shared_imports';
 import { SelectOption, SuperSelectOption } from '../../../../../types';
@@ -22,12 +21,26 @@ export interface MapOptionsToSubOptions {
 }
 
 const fieldConfig = getFieldConfig('inference_id');
-const analyzerOptions = PARAMETERS_OPTIONS.analyzer!;
-
-const fieldOptions = [...analyzerOptions] as SuperSelectOption[];
 
 export const SemanticTextRequiredParameters = () => {
   const { api } = useComponentTemplatesContext();
+  const [inferenceModels, setInferenceModels] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchInferenceModels = async () => {
+      const models = await api.getInferenceModels();
+      setInferenceModels(models);
+    };
+
+    fetchInferenceModels();
+  }, [api]);
+
+  const fieldOptions: SuperSelectOption[] =
+    inferenceModels?.data?.map((model: any) => ({
+      value: model.model_id,
+      inputDisplay: model.model_id,
+    })) || [];
+
   return (
     <FormRow
       title={
@@ -48,12 +61,8 @@ export const SemanticTextRequiredParameters = () => {
         {(field) => (
           <div className="mappingsEditor__selectSemanticText">
             <InferenceIdSelects
-              onChange={async (value) => {
-                const inferenceModels = await api.getInferenceModels();
-                field.setValue(value);
-              }}
-              mainDefaultValue={STANDARD}
-              subDefaultValue={STANDARD}
+              onChange={field.setValue}
+              mainDefaultValue={'my-elser-model'}
               config={fieldConfig}
               options={fieldOptions}
             />

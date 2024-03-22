@@ -22,7 +22,6 @@ import { SuperSelectOption } from '../../../types';
 interface Props {
   onChange(value: unknown): void;
   mainDefaultValue: string | undefined;
-  subDefaultValue: string | undefined;
   config: FieldConfig;
   options: SuperSelectOption[];
   'data-test-subj'?: string;
@@ -31,18 +30,17 @@ interface Props {
 export const InferenceIdSelects = ({
   onChange,
   mainDefaultValue,
-  subDefaultValue,
   config,
   options,
   'data-test-subj': dataTestSubj,
 }: Props) => {
-  const { form } = useForm({ defaultValue: { main: mainDefaultValue, sub: subDefaultValue } });
+  const { form } = useForm({ defaultValue: { main: mainDefaultValue } });
   const { subscribe } = form;
 
   useEffect(() => {
     const subscription = subscribe((updateData) => {
       const formData = updateData.data.internal;
-      const value = formData.sub ? formData.sub : formData.main;
+      const value = formData.main;
       onChange(value);
     });
 
