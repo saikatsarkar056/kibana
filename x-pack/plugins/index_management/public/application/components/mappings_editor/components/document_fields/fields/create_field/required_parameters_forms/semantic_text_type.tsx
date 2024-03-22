@@ -10,15 +10,8 @@ import React, { useEffect, useState } from 'react';
 import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
 import { getFieldConfig } from '../../../../../lib';
 import { Field, FormRow, UseField } from '../../../../../shared_imports';
-import { SelectOption, SuperSelectOption } from '../../../../../types';
+import { SuperSelectOption } from '../../../../../types';
 import { InferenceIdSelects } from '../../../field_parameters/inference_id_selects';
-
-export interface MapOptionsToSubOptions {
-  [key: string]: {
-    label: string;
-    options: SuperSelectOption[] | SelectOption[];
-  };
-}
 
 const fieldConfig = getFieldConfig('inference_id');
 
