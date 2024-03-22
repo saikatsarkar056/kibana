@@ -9,11 +9,17 @@ import { i18n } from '@kbn/i18n';
 import React, { useEffect, useState } from 'react';
 import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
 import { getFieldConfig } from '../../../../../lib';
-import { Field, FormRow, UseField } from '../../../../../shared_imports';
+import { FormRow, UseField } from '../../../../../shared_imports';
 import { SuperSelectOption } from '../../../../../types';
-import { InferenceIdSelects } from '../../../field_parameters/inference_id_selects';
+import { InferenceIdSelects as ModelIdSelects } from '../../../field_parameters/inference_id_selects';
 
-const fieldConfig = getFieldConfig('inference_id');
+const fieldConfigReferenceField = getFieldConfig('reference_field');
+const fieldConfigModelId = getFieldConfig('inference_id');
+
+const referenceFieldOptions: SuperSelectOption[] = [
+  { value: 'body-content', inputDisplay: 'body-content' },
+  { value: 'description', inputDisplay: 'description' },
+];
 
 export const SemanticTextRequiredParameters = () => {
   const { api } = useComponentTemplatesContext();
@@ -28,7 +34,7 @@ export const SemanticTextRequiredParameters = () => {
     fetchInferenceModels();
   }, [api]);
 
-  const fieldOptions: SuperSelectOption[] =
+  const modelIdOptions: SuperSelectOption[] =
     inferenceModels?.data?.map((model: any) => ({
       value: model.model_id,
       inputDisplay: model.model_id,
@@ -44,20 +50,27 @@ export const SemanticTextRequiredParameters = () => {
         </h3>
       }
     >
-      <UseField
-        path="reference_field"
-        config={getFieldConfig('reference_field')}
-        component={Field}
-      />
-
-      <UseField path="inference_id" config={fieldConfig}>
+      <UseField path="reference_field" config={fieldConfigReferenceField}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticText">
-            <InferenceIdSelects
+            <ModelIdSelects
               onChange={field.setValue}
-              mainDefaultValue={'my-elser-model'}
-              config={fieldConfig}
-              options={fieldOptions}
+              mainDefaultValue={'body-content'}
+              config={fieldConfigReferenceField}
+              options={referenceFieldOptions}
+            />
+          </div>
+        )}
+      </UseField>
+
+      <UseField path="inference_id" config={fieldConfigModelId}>
+        {(field) => (
+          <div className="mappingsEditor__selectSemanticText">
+            <ModelIdSelects
+              onChange={field.setValue}
+              mainDefaultValue={'my-elser-model-1'}
+              config={fieldConfigModelId}
+              options={modelIdOptions}
             />
           </div>
         )}

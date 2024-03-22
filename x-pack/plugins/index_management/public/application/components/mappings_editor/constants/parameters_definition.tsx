@@ -1070,27 +1070,12 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
   },
   reference_field: {
     fieldConfig: {
-      defaultValue: '',
-      type: FIELD_TYPES.NUMBER,
       label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.referenceFieldLabel', {
         defaultMessage: 'Reference field',
       }),
       helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.referenceFieldHelpText', {
         defaultMessage: 'Reference field for model inference.',
       }),
-      formatters: [toInt],
-      validations: [
-        {
-          validator: emptyField(
-            i18n.translate(
-              'xpack.idxMgmt.mappingsEditor.parameters.validations.referenceFieldIsRequiredErrorMessage',
-              {
-                defaultMessage: 'Select an existing reference field.',
-              }
-            )
-          ),
-        },
-      ],
     },
     schema: t.string,
   },
@@ -1102,8 +1087,6 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
       helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdHelpText', {
         defaultMessage: 'Inference id for a machine learning model.',
       }),
-      defaultValue: INDEX_DEFAULT,
-      validations: analyzerValidations,
     },
     schema: t.string,
   },
