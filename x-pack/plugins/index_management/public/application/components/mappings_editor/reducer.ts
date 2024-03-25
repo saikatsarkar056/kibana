@@ -314,8 +314,7 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
     case 'field.add': {
-      const s = addFieldToState(action.value, state);
-      return s;
+      return addFieldToState(action.value, state);
     }
     case 'field.addSemanticText': {
       const addRootFieldActionValue: Field = {
