@@ -22,11 +22,9 @@ export const SemanticTextRequiredParameters = () => {
   const { api } = useComponentTemplatesContext();
   const [inferenceModels, setInferenceModels] = useState<any>([]);
 
-  const location = useLocation();
-  const { search } = location;
+  const { search } = useLocation();
   const queryParams = useMemo(() => new URLSearchParams(search), [search]);
-  const indexName = queryParams.get('indexName') ?? '';
-  const { data } = useLoadIndexMappings(indexName);
+  const { data } = useLoadIndexMappings(queryParams.get('indexName') ?? '');
   const referenceFieldOptions: SuperSelectOption[] = [];
   if (data && data.mappings && data.mappings.properties) {
     Object.keys(data.mappings.properties).forEach((key) => {
