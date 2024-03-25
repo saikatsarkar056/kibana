@@ -324,19 +324,14 @@ export const reducer = (state: State, action: Action): State => {
       };
       const s2 = addFieldToState(addRootFieldActionValue, state);
 
-      const s3 = {
-        ...s2,
-        documentFields: {
-          ...s2.documentFields,
-        },
-      };
-      s3.documentFields.fieldToAddFieldTo =
+      s2.documentFields.fieldToAddFieldTo =
         s2.fields.rootLevelFields[s2.fields.rootLevelFields.length - 1];
       const addMultiFieldActionValue: Field = {
         name: action.value.name as string,
+        model_id: action.value.model_id as string,
         type: 'semantic_text',
       };
-      const s4 = addFieldToState(addMultiFieldActionValue, s3);
+      const s4 = addFieldToState(addMultiFieldActionValue, s2);
       s4.documentFields.fieldToAddFieldTo = undefined;
       return s4;
     }
