@@ -77,8 +77,11 @@ export const CreateField = React.memo(function CreateFieldComponent({
 
     if (isValid) {
       form.reset();
-      dispatch({ type: 'field.add', value: data });
-
+      if (data.type === 'semantic_text') {
+        dispatch({ type: 'field.addMulti', value: data });
+      } else {
+        dispatch({ type: 'field.add', value: data });
+      }
       if (exitAfter) {
         cancel();
       }

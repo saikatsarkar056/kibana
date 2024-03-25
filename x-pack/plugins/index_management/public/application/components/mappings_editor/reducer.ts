@@ -314,7 +314,22 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
     case 'field.add': {
-      return addFieldToState(action.value, state);
+      const s = addFieldToState(action.value, state);
+      return s;
+    }
+    case 'field.addMulti': {
+      const addRootFieldActionValue: Field = {
+        name: action.value.reference_field as string,
+        type: 'text',
+      };
+      const s1 = addFieldToState(addRootFieldActionValue, state);
+      s1.documentFields.fieldToAddFieldTo = s1.fields.rootLevelFields[0];
+      const addMultiFieldActionValue: Field = {
+        name: action.value.name as string,
+        type: 'semantic_text',
+      };
+
+      return addFieldToState(addMultiFieldActionValue, s1);
     }
     case 'field.remove': {
       const field = state.fields.byId[action.value];
