@@ -318,18 +318,11 @@ export const reducer = (state: State, action: Action): State => {
       return s;
     }
     case 'field.addSemanticText': {
-      const s1 = {
-        ...state,
-        documentFields: {
-          ...state.documentFields,
-          fieldToAddFieldTo: undefined,
-        },
-      };
       const addRootFieldActionValue: Field = {
         name: action.value.reference_field as string,
         type: 'text',
       };
-      const s2 = addFieldToState(addRootFieldActionValue, s1);
+      const s2 = addFieldToState(addRootFieldActionValue, state);
 
       const s3 = {
         ...s2,
