@@ -331,7 +331,7 @@ export const reducer = (state: State, action: Action): State => {
       };
       const s2 = addFieldToState(addRootFieldActionValue, s1);
 
-      let s3 = {
+      const s3 = {
         ...s2,
         documentFields: {
           ...s2.documentFields,
@@ -343,7 +343,8 @@ export const reducer = (state: State, action: Action): State => {
         name: action.value.name as string,
         type: 'semantic_text',
       };
-      let s4 = addFieldToState(addMultiFieldActionValue, s3);
+      const s4 = addFieldToState(addMultiFieldActionValue, s3);
+      s4.documentFields.fieldToAddFieldTo = undefined;
       return s4;
     }
     case 'field.remove': {
