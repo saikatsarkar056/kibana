@@ -322,18 +322,23 @@ export const reducer = (state: State, action: Action): State => {
         name: action.value.reference_field as string,
         type: 'text',
       };
-      const s2 = addFieldToState(addRootFieldActionValue, state);
 
-      s2.documentFields.fieldToAddFieldTo =
-        s2.fields.rootLevelFields[s2.fields.rootLevelFields.length - 1];
+      // Add root field to state and update fieldToAddFieldTo
+      let updatedState = addFieldToState(addRootFieldActionValue, state);
+      updatedState.documentFields.fieldToAddFieldTo =
+        updatedState.fields.rootLevelFields[updatedState.fields.rootLevelFields.length - 1];
+
       const addMultiFieldActionValue: Field = {
         name: action.value.name as string,
         model_id: action.value.model_id as string,
         type: 'semantic_text',
       };
-      const s4 = addFieldToState(addMultiFieldActionValue, s2);
-      s4.documentFields.fieldToAddFieldTo = undefined;
-      return s4;
+
+      // Add multi field to state and reset fieldToAddFieldTo
+      updatedState = addFieldToState(addMultiFieldActionValue, updatedState);
+      updatedState.documentFields.fieldToAddFieldTo = undefined;
+
+      return updatedState;
     }
     case 'field.remove': {
       const field = state.fields.byId[action.value];
