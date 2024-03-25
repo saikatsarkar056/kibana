@@ -1081,11 +1081,8 @@ export const PARAMETERS_DEFINITION: { [key in ParameterName]: ParameterDefinitio
   },
   model_id: {
     fieldConfig: {
-      label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdLabel', {
-        defaultMessage: 'Inference ID',
-      }),
-      helpText: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.inferenceIdHelpText', {
-        defaultMessage: 'Inference id for a machine learning model.',
+      label: i18n.translate('xpack.idxMgmt.mappingsEditor.parameters.modelIdLabel', {
+        defaultMessage: 'Select an inference endpoint:',
       }),
     },
     schema: t.string,
