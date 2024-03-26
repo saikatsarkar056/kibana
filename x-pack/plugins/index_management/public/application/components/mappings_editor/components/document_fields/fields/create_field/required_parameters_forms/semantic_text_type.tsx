@@ -6,35 +6,10 @@
  */
 
 import { i18n } from '@kbn/i18n';
-import React, { useEffect, useState } from 'react';
-import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
-import { getFieldConfig } from '../../../../../lib';
-import { FormRow, UseField } from '../../../../../shared_imports';
-import { SuperSelectOption } from '../../../../../types';
-import { ModelIdSelects } from '../../../field_parameters/model_id_selects';
-
-const fieldConfigReferenceField = getFieldConfig('reference_field');
-const fieldConfigModelId = getFieldConfig('model_id');
+import React from 'react';
+import { FormRow } from '../../../../../shared_imports';
 
 export const SemanticTextRequiredParameters = () => {
-  const { api } = useComponentTemplatesContext();
-  const [inferenceModels, setInferenceModels] = useState<any>([]);
-
-  useEffect(() => {
-    const fetchInferenceModels = async () => {
-      const models = await api.getInferenceModels();
-      setInferenceModels(models);
-    };
-
-    fetchInferenceModels();
-  }, [api]);
-
-  const modelIdOptions: SuperSelectOption[] =
-    inferenceModels?.data?.map((model: any) => ({
-      value: model.model_id,
-      inputDisplay: model.model_id,
-    })) || [];
-
   return (
     <FormRow
       title={
@@ -45,18 +20,13 @@ export const SemanticTextRequiredParameters = () => {
         </h3>
       }
     >
-      <UseField path="model_id" config={fieldConfigModelId}>
+      {/* <UseField path="model_id">
         {(field) => (
           <div className="mappingsEditor__selectSemanticTextModelId">
-            <ModelIdSelects
-              onChange={field.setValue}
-              mainDefaultValue={'my-elser-model-1'}
-              config={fieldConfigModelId}
-              options={modelIdOptions}
-            />
+            <ModelIdSelects onChange={field.setValue} />
           </div>
         )}
-      </UseField>
+      </UseField> */}
     </FormRow>
   );
 };

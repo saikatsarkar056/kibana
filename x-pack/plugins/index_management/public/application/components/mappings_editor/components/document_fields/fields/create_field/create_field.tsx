@@ -5,26 +5,27 @@
  * 2.0.
  */
 
-import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import React, { useEffect } from 'react';
 
 import { i18n } from '@kbn/i18n';
 
 import {
-  EuiButtonEmpty,
   EuiButton,
+  EuiButtonEmpty,
   EuiFlexGroup,
   EuiFlexItem,
   EuiOutsideClickDetector,
   EuiSpacer,
 } from '@elastic/eui';
 
-import { useForm, Form, UseField, FormDataProvider } from '../../../../shared_imports';
 import { EUI_SIZE, TYPE_DEFINITION } from '../../../../constants';
-import { useDispatch } from '../../../../mappings_state_context';
 import { fieldSerializer } from '../../../../lib';
-import { Field, NormalizedFields, MainType } from '../../../../types';
-import { NameParameter, TypeParameter, SubTypeParameter } from '../../field_parameters';
+import { useDispatch } from '../../../../mappings_state_context';
+import { Form, FormDataProvider, UseField, useForm } from '../../../../shared_imports';
+import { Field, MainType, NormalizedFields } from '../../../../types';
+import { NameParameter, SubTypeParameter, TypeParameter } from '../../field_parameters';
+import { ModelIdSelects } from '../../field_parameters/model_id_selects';
 import { ReferenceFieldSelects } from '../../field_parameters/reference_field_selects';
 import { FieldBetaBadge } from '../field_beta_badge';
 import { getRequiredParametersFormForType } from './required_parameters_forms';
@@ -249,6 +250,30 @@ export const CreateField = React.memo(function CreateFieldComponent({
                 );
               }}
             </FormDataProvider>
+
+            <EuiFlexGroup gutterSize="s" alignItems="center">
+              {/* Field reference_field for semantic_text field type */}
+              <FormDataProvider pathsToWatch="type">
+                {({ type }) => {
+                  if (type === undefined || type[0]?.value !== 'semantic_text') {
+                    return null;
+                  }
+
+                  return (
+                    <EuiFlexItem grow={false}>
+                      <UseField path="model_id">
+                        {(field) => (
+                          <div className="mappingsEditor__selectSemanticTextModelId">
+                            <ModelIdSelects onChange={field.setValue} />
+                          </div>
+                        )}
+                      </UseField>
+                    </EuiFlexItem>
+                  );
+                }}
+              </FormDataProvider>
+            </EuiFlexGroup>
+
             <EuiFlexGroup gutterSize="s" alignItems="center">
               <EuiFlexItem grow={true} />
               <EuiFlexItem grow={false}>{renderFormActions()}</EuiFlexItem>

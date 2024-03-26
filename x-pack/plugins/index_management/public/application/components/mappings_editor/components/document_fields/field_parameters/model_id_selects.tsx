@@ -6,10 +6,11 @@
  */
 
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { useComponentTemplatesContext } from '../../../../component_templates/component_templates_context';
+import { getFieldConfig } from '../../../lib';
 import {
-  FieldConfig,
   FieldHook,
   Form,
   FormDataProvider,
@@ -18,24 +19,32 @@ import {
   useForm,
 } from '../../../shared_imports';
 import { SuperSelectOption } from '../../../types';
-
 interface Props {
   onChange(value: unknown): void;
-  mainDefaultValue: string | undefined;
-  config: FieldConfig;
-  options: SuperSelectOption[];
   'data-test-subj'?: string;
 }
 
-export const ModelIdSelects = ({
-  onChange,
-  mainDefaultValue,
-  config,
-  options,
-  'data-test-subj': dataTestSubj,
-}: Props) => {
-  const { form } = useForm({ defaultValue: { main: mainDefaultValue } });
+export const ModelIdSelects = ({ onChange, 'data-test-subj': dataTestSubj }: Props) => {
+  const { form } = useForm({ defaultValue: { main: 'elser' } });
   const { subscribe } = form;
+  const { api } = useComponentTemplatesContext();
+  const [inferenceModels, setInferenceModels] = useState<any>([]);
+
+  const fieldConfigModelId = getFieldConfig('model_id');
+  const modelIdOptions: SuperSelectOption[] =
+    inferenceModels?.data?.map((model: any) => ({
+      value: model.model_id,
+      inputDisplay: model.model_id,
+    })) || [];
+
+  useEffect(() => {
+    const fetchInferenceModels = async () => {
+      const models = await api.getInferenceModels();
+      setInferenceModels(models);
+    };
+
+    fetchInferenceModels();
+  }, [api]);
 
   useEffect(() => {
     const subscription = subscribe((updateData) => {
@@ -66,8 +75,8 @@ export const ModelIdSelects = ({
           return (
             <EuiFlexGroup>
               <EuiFlexItem>
-                <UseField path="main" config={config} onChange={onMainValueChange}>
-                  {(field) => renderSelect(field, options)}
+                <UseField path="main" config={fieldConfigModelId} onChange={onMainValueChange}>
+                  {(field) => renderSelect(field, modelIdOptions)}
                 </UseField>
               </EuiFlexItem>
             </EuiFlexGroup>
