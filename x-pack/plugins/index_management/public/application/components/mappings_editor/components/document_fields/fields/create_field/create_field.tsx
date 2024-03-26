@@ -194,36 +194,6 @@ export const CreateField = React.memo(function CreateFieldComponent({
     </EuiFlexGroup>
   );
 
-  const renderModelId = () => (
-    <>
-      {/* Field model_id for semantic_text field type */}
-      <FormDataProvider pathsToWatch="type">
-        {({ type }) => {
-          if (type === undefined || type[0]?.value !== 'semantic_text') {
-            return null;
-          }
-
-          return (
-            <>
-              <EuiSpacer />
-              <EuiFlexGroup gutterSize="s" alignItems="center">
-                <EuiFlexItem grow={false}>
-                  <UseField path="model_id">
-                    {(field) => (
-                      <div className="mappingsEditor__selectSemanticTextModelId">
-                        <ModelIdSelects onChange={field.setValue} />
-                      </div>
-                    )}
-                  </UseField>
-                </EuiFlexItem>
-              </EuiFlexGroup>
-            </>
-          );
-        }}
-      </FormDataProvider>
-    </>
-  );
-
   return (
     <EuiOutsideClickDetector onOutsideClick={onClickOutside}>
       <Form
@@ -279,7 +249,31 @@ export const CreateField = React.memo(function CreateFieldComponent({
               }}
             </FormDataProvider>
 
-            {renderModelId()}
+            {/* Field model_id for semantic_text field type */}
+            <FormDataProvider pathsToWatch="type">
+              {({ type }) => {
+                if (type === undefined || type[0]?.value !== 'semantic_text') {
+                  return null;
+                }
+
+                return (
+                  <>
+                    <EuiSpacer />
+                    <EuiFlexGroup gutterSize="s" alignItems="center">
+                      <EuiFlexItem grow={false}>
+                        <UseField path="model_id">
+                          {(field) => (
+                            <div className="mappingsEditor__selectSemanticTextModelId">
+                              <ModelIdSelects onChange={field.setValue} />
+                            </div>
+                          )}
+                        </UseField>
+                      </EuiFlexItem>
+                    </EuiFlexGroup>
+                  </>
+                );
+              }}
+            </FormDataProvider>
 
             <EuiFlexGroup gutterSize="s" alignItems="center">
               <EuiFlexItem grow={true} />
