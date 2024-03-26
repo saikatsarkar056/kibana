@@ -19,12 +19,13 @@ import {
   EuiSpacer,
 } from '@elastic/eui';
 
-import { useForm, Form, FormDataProvider } from '../../../../shared_imports';
+import { useForm, Form, UseField, FormDataProvider } from '../../../../shared_imports';
 import { EUI_SIZE, TYPE_DEFINITION } from '../../../../constants';
 import { useDispatch } from '../../../../mappings_state_context';
 import { fieldSerializer } from '../../../../lib';
 import { Field, NormalizedFields, MainType } from '../../../../types';
 import { NameParameter, TypeParameter, SubTypeParameter } from '../../field_parameters';
+import { ReferenceFieldSelects } from '../../field_parameters/reference_field_selects';
 import { FieldBetaBadge } from '../field_beta_badge';
 import { getRequiredParametersFormForType } from './required_parameters_forms';
 
@@ -129,6 +130,27 @@ export const CreateField = React.memo(function CreateFieldComponent({
               isMultiField={isMultiField ?? false}
               isRootLevelField={isRootLevelField}
             />
+          );
+        }}
+      </FormDataProvider>
+
+      {/* Field reference_field for semantic_text field type */}
+      <FormDataProvider pathsToWatch="type">
+        {({ type }) => {
+          if (type === undefined || type[0]?.value !== 'semantic_text') {
+            return null;
+          }
+
+          return (
+            <EuiFlexItem grow={false}>
+              <UseField path="reference_field">
+                {(field) => (
+                  <div className="mappingsEditor__selectSemanticTextReferenceField">
+                    <ReferenceFieldSelects onChange={field.setValue} />
+                  </div>
+                )}
+              </UseField>
+            </EuiFlexItem>
           );
         }}
       </FormDataProvider>

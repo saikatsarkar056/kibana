@@ -12,7 +12,6 @@ import { getFieldConfig } from '../../../../../lib';
 import { FormRow, UseField } from '../../../../../shared_imports';
 import { SuperSelectOption } from '../../../../../types';
 import { ModelIdSelects } from '../../../field_parameters/model_id_selects';
-import { ReferenceFieldSelects } from '../../../field_parameters/reference_field_selects';
 
 const fieldConfigReferenceField = getFieldConfig('reference_field');
 const fieldConfigModelId = getFieldConfig('model_id');
@@ -46,14 +45,6 @@ export const SemanticTextRequiredParameters = () => {
         </h3>
       }
     >
-      <UseField path="reference_field" config={fieldConfigReferenceField}>
-        {(field) => (
-          <div className="mappingsEditor__selectSemanticTextReferenceField">
-            <ReferenceFieldSelects onChange={field.setValue} />
-          </div>
-        )}
-      </UseField>
-
       <UseField path="model_id" config={fieldConfigModelId}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticTextModelId">
