@@ -48,8 +48,9 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   index: Index;
   data: string;
   jsonData: any;
+  isSemanticTextEnabled?: boolean;
   refetchMapping: () => void;
-}> = ({ index, data, jsonData, refetchMapping }) => {
+}> = ({ index, data, jsonData, isSemanticTextEnabled = false, refetchMapping }) => {
   const {
     services: { extensionsService },
     core: { getUrlForApp },
@@ -360,7 +361,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
                 borders="all"
               >
                 <EuiPanel>
-                  <DocumentFields isSemanticTextEnabled={false} />
+                  <DocumentFields isSemanticTextEnabled={isSemanticTextEnabled} />
                 </EuiPanel>
               </EuiAccordion>
             </EuiFlexItem>
