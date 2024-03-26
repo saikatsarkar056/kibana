@@ -37,6 +37,7 @@ interface Props {
   paddingLeft?: number;
   isCancelable?: boolean;
   maxNestedDepth?: number;
+  isSemanticTextEnabled?: boolean;
 }
 
 export const CreateField = React.memo(function CreateFieldComponent({
@@ -46,6 +47,7 @@ export const CreateField = React.memo(function CreateFieldComponent({
   paddingLeft,
   isCancelable,
   maxNestedDepth,
+  isSemanticTextEnabled,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -113,6 +115,7 @@ export const CreateField = React.memo(function CreateFieldComponent({
           isRootLevelField={isRootLevelField}
           isMultiField={isMultiField}
           showDocLink
+          isSemanticTextEnabled={isSemanticTextEnabled}
         />
       </EuiFlexItem>
 

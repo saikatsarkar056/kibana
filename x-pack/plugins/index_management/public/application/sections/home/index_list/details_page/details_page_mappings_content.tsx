@@ -360,7 +360,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
                 borders="all"
               >
                 <EuiPanel>
-                  <DocumentFields />
+                  <DocumentFields isSemanticTextEnabled={false} />
                 </EuiPanel>
               </EuiAccordion>
             </EuiFlexItem>
