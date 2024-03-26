@@ -6,15 +6,13 @@
  */
 
 import { i18n } from '@kbn/i18n';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useComponentTemplatesContext } from '../../../../../../component_templates/component_templates_context';
 import { getFieldConfig } from '../../../../../lib';
 import { FormRow, UseField } from '../../../../../shared_imports';
 import { SuperSelectOption } from '../../../../../types';
 import { ModelIdSelects } from '../../../field_parameters/model_id_selects';
 import { ReferenceFieldSelects } from '../../../field_parameters/reference_field_selects';
-import { useLoadIndexMappings } from '../../../../../../../services';
 
 const fieldConfigReferenceField = getFieldConfig('reference_field');
 const fieldConfigModelId = getFieldConfig('model_id');
@@ -22,19 +20,6 @@ const fieldConfigModelId = getFieldConfig('model_id');
 export const SemanticTextRequiredParameters = () => {
   const { api } = useComponentTemplatesContext();
   const [inferenceModels, setInferenceModels] = useState<any>([]);
-
-  const { search } = useLocation();
-  const queryParams = useMemo(() => new URLSearchParams(search), [search]);
-  const { data } = useLoadIndexMappings(queryParams.get('indexName') ?? '');
-  const referenceFieldOptions: SuperSelectOption[] = [];
-  if (data && data.mappings && data.mappings.properties) {
-    Object.keys(data.mappings.properties).forEach((key) => {
-      const field = data.mappings.properties[key];
-      if (field.type === 'text') {
-        referenceFieldOptions.push({ value: key, inputDisplay: key });
-      }
-    });
-  }
 
   useEffect(() => {
     const fetchInferenceModels = async () => {
@@ -64,12 +49,7 @@ export const SemanticTextRequiredParameters = () => {
       <UseField path="reference_field" config={fieldConfigReferenceField}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticTextReferenceField">
-            <ReferenceFieldSelects
-              onChange={field.setValue}
-              mainDefaultValue={'body-content'}
-              config={fieldConfigReferenceField}
-              options={referenceFieldOptions}
-            />
+            <ReferenceFieldSelects onChange={field.setValue} mainDefaultValue={'body-content'} />
           </div>
         )}
       </UseField>

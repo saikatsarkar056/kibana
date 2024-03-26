@@ -6,10 +6,10 @@
  */
 
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
+import { useLocation } from 'react-router-dom';
 import {
-  FieldConfig,
   FieldHook,
   Form,
   FormDataProvider,
@@ -18,24 +18,36 @@ import {
   useForm,
 } from '../../../shared_imports';
 import { SuperSelectOption } from '../../../types';
+import { useLoadIndexMappings } from '../../../../../services';
+import { getFieldConfig } from '../../../lib';
 
 interface Props {
   onChange(value: unknown): void;
   mainDefaultValue: string | undefined;
-  config: FieldConfig;
-  options: SuperSelectOption[];
   'data-test-subj'?: string;
 }
 
 export const ReferenceFieldSelects = ({
   onChange,
   mainDefaultValue,
-  config,
-  options,
   'data-test-subj': dataTestSubj,
 }: Props) => {
   const { form } = useForm({ defaultValue: { main: mainDefaultValue } });
   const { subscribe } = form;
+
+  const { search } = useLocation();
+  const queryParams = useMemo(() => new URLSearchParams(search), [search]);
+  const { data } = useLoadIndexMappings(queryParams.get('indexName') ?? '');
+  const referenceFieldOptions: SuperSelectOption[] = [];
+  if (data && data.mappings && data.mappings.properties) {
+    Object.keys(data.mappings.properties).forEach((key) => {
+      const field = data.mappings.properties[key];
+      if (field.type === 'text') {
+        referenceFieldOptions.push({ value: key, inputDisplay: key });
+      }
+    });
+  }
+  const fieldConfigReferenceField = getFieldConfig('reference_field');
 
   useEffect(() => {
     const subscription = subscribe((updateData) => {
@@ -66,8 +78,12 @@ export const ReferenceFieldSelects = ({
           return (
             <EuiFlexGroup>
               <EuiFlexItem>
-                <UseField path="main" config={config} onChange={onMainValueChange}>
-                  {(field) => renderSelect(field, options)}
+                <UseField
+                  path="main"
+                  config={fieldConfigReferenceField}
+                  onChange={onMainValueChange}
+                >
+                  {(field) => renderSelect(field, referenceFieldOptions)}
                 </UseField>
               </EuiFlexItem>
             </EuiFlexGroup>
