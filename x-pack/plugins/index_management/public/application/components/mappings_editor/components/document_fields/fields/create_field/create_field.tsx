@@ -104,13 +104,8 @@ export const CreateField = React.memo(function CreateFieldComponent({
 
   const renderFormFields = () => (
     <EuiFlexGroup gutterSize="s">
-      {/* Field name */}
-      <EuiFlexItem>
-        <NameParameter />
-      </EuiFlexItem>
-
       {/* Field type */}
-      <EuiFlexItem>
+      <EuiFlexItem grow={false}>
         <TypeParameter
           isRootLevelField={isRootLevelField}
           isMultiField={isMultiField}
@@ -137,6 +132,11 @@ export const CreateField = React.memo(function CreateFieldComponent({
           );
         }}
       </FormDataProvider>
+
+      {/* Field name */}
+      <EuiFlexItem grow={true}>
+        <NameParameter />
+      </EuiFlexItem>
     </EuiFlexGroup>
   );
 
@@ -198,7 +198,6 @@ export const CreateField = React.memo(function CreateFieldComponent({
               <EuiFlexItem className="mappingsEditor__createFieldContent__formFields">
                 {renderFormFields()}
               </EuiFlexItem>
-              <EuiFlexItem grow={false}>{renderFormActions()}</EuiFlexItem>
             </EuiFlexGroup>
 
             <FormDataProvider pathsToWatch={['type', 'subType']}>
@@ -228,6 +227,10 @@ export const CreateField = React.memo(function CreateFieldComponent({
                 );
               }}
             </FormDataProvider>
+            <EuiFlexGroup gutterSize="s" alignItems="center">
+              <EuiFlexItem grow={true} />
+              <EuiFlexItem grow={false}>{renderFormActions()}</EuiFlexItem>
+            </EuiFlexGroup>
           </div>
         </div>
       </Form>

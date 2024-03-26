@@ -50,7 +50,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   jsonData: any;
   isSemanticTextEnabled?: boolean;
   refetchMapping: () => void;
-}> = ({ index, data, jsonData, isSemanticTextEnabled = false, refetchMapping }) => {
+}> = ({ index, data, jsonData, isSemanticTextEnabled = true, refetchMapping }) => {
   const {
     services: { extensionsService },
     core: { getUrlForApp },
