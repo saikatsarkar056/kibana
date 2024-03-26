@@ -13,6 +13,7 @@ import { getFieldConfig } from '../../../../../lib';
 import { FormRow, UseField } from '../../../../../shared_imports';
 import { SuperSelectOption } from '../../../../../types';
 import { ModelIdSelects } from '../../../field_parameters/model_id_selects';
+import { ReferenceFieldSelects } from '../../../field_parameters/reference_field_selects';
 import { useLoadIndexMappings } from '../../../../../../../services';
 
 const fieldConfigReferenceField = getFieldConfig('reference_field');
@@ -62,8 +63,8 @@ export const SemanticTextRequiredParameters = () => {
     >
       <UseField path="reference_field" config={fieldConfigReferenceField}>
         {(field) => (
-          <div className="mappingsEditor__selectSemanticText">
-            <ModelIdSelects
+          <div className="mappingsEditor__selectSemanticTextReferenceField">
+            <ReferenceFieldSelects
               onChange={field.setValue}
               mainDefaultValue={'body-content'}
               config={fieldConfigReferenceField}
@@ -75,7 +76,7 @@ export const SemanticTextRequiredParameters = () => {
 
       <UseField path="model_id" config={fieldConfigModelId}>
         {(field) => (
-          <div className="mappingsEditor__selectSemanticText">
+          <div className="mappingsEditor__selectSemanticTextModelId">
             <ModelIdSelects
               onChange={field.setValue}
               mainDefaultValue={'my-elser-model-1'}
