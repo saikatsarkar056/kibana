@@ -23,16 +23,11 @@ import { getFieldConfig } from '../../../lib';
 
 interface Props {
   onChange(value: unknown): void;
-  mainDefaultValue: string | undefined;
   'data-test-subj'?: string;
 }
 
-export const ReferenceFieldSelects = ({
-  onChange,
-  mainDefaultValue,
-  'data-test-subj': dataTestSubj,
-}: Props) => {
-  const { form } = useForm({ defaultValue: { main: mainDefaultValue } });
+export const ReferenceFieldSelects = ({ onChange, 'data-test-subj': dataTestSubj }: Props) => {
+  const { form } = useForm({ defaultValue: { main: 'body-content' } });
   const { subscribe } = form;
 
   const { search } = useLocation();

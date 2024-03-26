@@ -49,7 +49,7 @@ export const SemanticTextRequiredParameters = () => {
       <UseField path="reference_field" config={fieldConfigReferenceField}>
         {(field) => (
           <div className="mappingsEditor__selectSemanticTextReferenceField">
-            <ReferenceFieldSelects onChange={field.setValue} mainDefaultValue={'body-content'} />
+            <ReferenceFieldSelects onChange={field.setValue} />
           </div>
         )}
       </UseField>
