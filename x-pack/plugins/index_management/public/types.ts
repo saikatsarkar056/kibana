@@ -5,12 +5,13 @@
  * 2.0.
  */
 
-import { UsageCollectionSetup } from '@kbn/usage-collection-plugin/public';
-import { ManagementSetup } from '@kbn/management-plugin/public';
-import { SharePluginSetup, SharePluginStart } from '@kbn/share-plugin/public';
 import { CloudSetup } from '@kbn/cloud-plugin/public';
 import { ConsolePluginStart } from '@kbn/console-plugin/public';
 import { ScopedHistory } from '@kbn/core-application-browser';
+import { ManagementSetup } from '@kbn/management-plugin/public';
+import { MlPluginStart } from '@kbn/ml-plugin/public';
+import { SharePluginSetup, SharePluginStart } from '@kbn/share-plugin/public';
+import { UsageCollectionSetup } from '@kbn/usage-collection-plugin/public';
 import { IndexMappingProps } from './application/sections/home/index_list/details_page/index_mapping_with_context_types';
 import { ExtensionsSetup, PublicApiServiceSetup } from './services';
 
@@ -41,6 +42,7 @@ export interface StartDependencies {
   fleet?: unknown;
   usageCollection: UsageCollectionSetup;
   management: ManagementSetup;
+  ml: MlPluginStart;
 }
 
 export interface ClientConfigType {

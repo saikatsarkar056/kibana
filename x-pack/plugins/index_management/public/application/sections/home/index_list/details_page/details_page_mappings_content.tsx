@@ -82,6 +82,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   const {
     services: { extensionsService },
     core: { getUrlForApp },
+    plugins: { ml },
   } = useAppContext();
 
   const state = useMappingsState();
@@ -193,6 +194,9 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   const updateMappings = useCallback(async () => {
     try {
       const { error } = await updateIndexMappings(indexName, deNormalize(state.fields));
+
+      // const modelsDownloads = await ml.mlApi?.trainedModels.getTrainedModels();
+      // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
 
       if (!error) {
         notificationService.showSuccessToast(

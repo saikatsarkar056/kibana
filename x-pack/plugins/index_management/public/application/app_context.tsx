@@ -5,28 +5,29 @@
  * 2.0.
  */
 
-import React, { createContext, useContext } from 'react';
-import { Observable } from 'rxjs';
-import SemVer from 'semver/classes/semver';
-import { UsageCollectionSetup } from '@kbn/usage-collection-plugin/public';
 import {
   ApplicationStart,
   CoreTheme,
-  FatalErrorsStart,
-  ScopedHistory,
   DocLinksStart,
-  IUiSettingsClient,
   ExecutionContextStart,
+  FatalErrorsStart,
   HttpSetup,
+  IUiSettingsClient,
+  ScopedHistory,
 } from '@kbn/core/public';
+import { MlPluginStart } from '@kbn/ml-plugin/public';
 import type { SharePluginStart } from '@kbn/share-plugin/public';
+import { UsageCollectionSetup } from '@kbn/usage-collection-plugin/public';
+import React, { createContext, useContext } from 'react';
+import { Observable } from 'rxjs';
+import SemVer from 'semver/classes/semver';
 
-import type { SettingsStart } from '@kbn/core-ui-settings-browser';
+import { EuiBreadcrumb } from '@elastic/eui';
 import type { CloudSetup } from '@kbn/cloud-plugin/public';
 import type { ConsolePluginStart } from '@kbn/console-plugin/public';
-import { EuiBreadcrumb } from '@elastic/eui';
+import type { SettingsStart } from '@kbn/core-ui-settings-browser';
 import { ExtensionsService } from '../services';
-import { UiMetricService, NotificationService, HttpService } from './services';
+import { HttpService, NotificationService, UiMetricService } from './services';
 import { IndexManagementBreadcrumb } from './services/breadcrumbs';
 
 export const AppContext = createContext<AppDependencies | undefined>(undefined);
@@ -45,6 +46,7 @@ export interface AppDependencies {
     share: SharePluginStart;
     cloud?: CloudSetup;
     console?: ConsolePluginStart;
+    ml: MlPluginStart;
   };
   services: {
     uiMetricService: UiMetricService;
