@@ -6,7 +6,7 @@
  */
 
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 
 import { i18n } from '@kbn/i18n';
 
@@ -17,6 +17,7 @@ import {
   EuiFlexItem,
   EuiOutsideClickDetector,
   EuiSpacer,
+  EuiGlobalToastList,
 } from '@elastic/eui';
 
 import { EUI_SIZE, TYPE_DEFINITION } from '../../../../constants';
@@ -116,6 +117,39 @@ export const CreateField = React.memo(function CreateFieldComponent({
     setSemanticTextFieldType(type[0]?.value === 'semantic_text' ? type[0].value : undefined);
   }, [form, fieldTypeValue]);
 
+  let toastId = 0;
+
+  const addToast = () => {
+    const toast = getRandomToast();
+    setToasts(toasts.concat(toast));
+  };
+
+  interface Toast {
+    title: string;
+    text: JSX.Element;
+    id: string;
+  }
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const removeToast = (removedToast: any) => {
+    setToasts((toastList) => toastList.filter((toast) => toast.id !== removedToast.id));
+  };
+  const getRandomToast = () => {
+    const toast = {
+      title: 'Model deployment started',
+      text: (
+        <Fragment>
+          <p>1 model is being deployed on your ml_node.</p>
+          <p />
+        </Fragment>
+      ),
+    };
+    return {
+      id: `toast${toastId++}`,
+      ...toast,
+    };
+  };
+
   const submitForm = async (e?: React.FormEvent, exitAfter: boolean = false) => {
     if (e) {
       e.preventDefault();
@@ -126,6 +160,7 @@ export const CreateField = React.memo(function CreateFieldComponent({
     if (isValid) {
       form.reset();
       if (data.type === 'semantic_text') {
+        addToast();
         dispatch({ type: 'field.addSemanticText', value: data });
       } else {
         dispatch({ type: 'field.add', value: data });
@@ -225,70 +260,73 @@ export const CreateField = React.memo(function CreateFieldComponent({
   );
 
   return (
-    <EuiOutsideClickDetector onOutsideClick={onClickOutside}>
-      <Form
-        form={form}
-        FormWrapper={formWrapper}
-        onSubmit={submitForm}
-        data-test-subj="createFieldForm"
-      >
-        <div
-          className={classNames('mappingsEditor__createFieldWrapper', {
-            'mappingsEditor__createFieldWrapper--toggle':
-              Boolean(maxNestedDepth) && maxNestedDepth! > 0,
-            'mappingsEditor__createFieldWrapper--multiField': isMultiField,
-          })}
-          style={{
-            paddingLeft: `${
-              isMultiField
-                ? paddingLeft! - EUI_SIZE * 1.5 // As there are no "L" bullet list we need to substract some indent
-                : paddingLeft
-            }px`,
-          }}
+    <>
+      <EuiOutsideClickDetector onOutsideClick={onClickOutside}>
+        <Form
+          form={form}
+          FormWrapper={formWrapper}
+          onSubmit={submitForm}
+          data-test-subj="createFieldForm"
         >
-          <div className="mappingsEditor__createFieldContent">
-            <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="spaceBetween">
-              <EuiFlexItem>{renderFormFields()}</EuiFlexItem>
-            </EuiFlexGroup>
+          <div
+            className={classNames('mappingsEditor__createFieldWrapper', {
+              'mappingsEditor__createFieldWrapper--toggle':
+                Boolean(maxNestedDepth) && maxNestedDepth! > 0,
+              'mappingsEditor__createFieldWrapper--multiField': isMultiField,
+            })}
+            style={{
+              paddingLeft: `${
+                isMultiField
+                  ? paddingLeft! - EUI_SIZE * 1.5 // As there are no "L" bullet list we need to substract some indent
+                  : paddingLeft
+              }px`,
+            }}
+          >
+            <div className="mappingsEditor__createFieldContent">
+              <EuiFlexGroup gutterSize="s" alignItems="center" justifyContent="spaceBetween">
+                <EuiFlexItem>{renderFormFields()}</EuiFlexItem>
+              </EuiFlexGroup>
 
-            <FormDataProvider pathsToWatch={['type', 'subType']}>
-              {({ type, subType }) => {
-                const RequiredParametersForm = getRequiredParametersFormForType(
-                  type?.[0]?.value,
-                  subType?.[0]?.value
-                );
+              <FormDataProvider pathsToWatch={['type', 'subType']}>
+                {({ type, subType }) => {
+                  const RequiredParametersForm = getRequiredParametersFormForType(
+                    type?.[0]?.value,
+                    subType?.[0]?.value
+                  );
 
-                if (!RequiredParametersForm) {
-                  return null;
-                }
+                  if (!RequiredParametersForm) {
+                    return null;
+                  }
 
-                const typeDefinition = TYPE_DEFINITION[type?.[0].value as MainType];
+                  const typeDefinition = TYPE_DEFINITION[type?.[0].value as MainType];
 
-                return (
-                  <div className="mappingsEditor__createFieldRequiredProps">
-                    {typeDefinition.isBeta ? (
-                      <>
-                        <FieldBetaBadge />
-                        <EuiSpacer size="m" />
-                      </>
-                    ) : null}
+                  return (
+                    <div className="mappingsEditor__createFieldRequiredProps">
+                      {typeDefinition.isBeta ? (
+                        <>
+                          <FieldBetaBadge />
+                          <EuiSpacer size="m" />
+                        </>
+                      ) : null}
 
-                    <RequiredParametersForm key={subType ?? type} allFields={allFields} />
-                  </div>
-                );
-              }}
-            </FormDataProvider>
-            {/* Field inference_id for semantic_text field type */}
-            <InferenceIdCombo />
+                      <RequiredParametersForm key={subType ?? type} allFields={allFields} />
+                    </div>
+                  );
+                }}
+              </FormDataProvider>
+              {/* Field inference_id for semantic_text field type */}
+              <InferenceIdCombo />
 
-            <EuiFlexGroup gutterSize="s" alignItems="center">
-              <EuiFlexItem grow={true} />
-              <EuiFlexItem grow={false}>{renderFormActions()}</EuiFlexItem>
-            </EuiFlexGroup>
+              <EuiFlexGroup gutterSize="s" alignItems="center">
+                <EuiFlexItem grow={true} />
+                <EuiFlexItem grow={false}>{renderFormActions()}</EuiFlexItem>
+              </EuiFlexGroup>
+            </div>
           </div>
-        </div>
-      </Form>
-    </EuiOutsideClickDetector>
+        </Form>
+      </EuiOutsideClickDetector>
+      <EuiGlobalToastList toasts={toasts} dismissToast={removeToast} toastLifeTimeMs={60000} />
+    </>
   );
 });
 
