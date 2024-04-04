@@ -212,17 +212,16 @@ export const DetailsPageMappingsContent: FunctionComponent<{
       }
 
       const { error } = await updateIndexMappings(indexName, denormalizedFields);
+      const modelStats = await ml.mlApi?.trainedModels.getTrainedModelStats();
 
-      // const modelsDownloads = await ml.mlApi?.trainedModels.getTrainedModels();
-      // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
-      // const modelsDownloads = await ml.mlApi?.trainedModels.startModelAllocation('.elser_model_2');
-      // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
-      // const modelStats = await ml.mlApi?.trainedModels.getTrainedModelStats();
-
-      // const deploymentStates = modelStats?.trained_model_stats.map((modelStat) =>
-      //   modelStat?.deployment_stats?.state === 'started' ? 'started' : 'not_deployed'
-      // );
-      // console.log('===== deploymentStates from details_page_mappings =====  ', deploymentStates);
+      const deploymentStatsById =
+        modelStats?.trained_model_stats.reduce<{ [key: string]: string }>((acc, modelStat) => {
+          if (modelStat.model_id) {
+            acc[modelStat.model_id] =
+              modelStat?.deployment_stats?.state === 'started' ? 'deployed' : 'not_deployed';
+          }
+          return acc;
+        }, {}) ?? {};
 
       if (!error) {
         notificationService.showSuccessToast(
