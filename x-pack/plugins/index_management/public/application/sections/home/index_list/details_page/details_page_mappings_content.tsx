@@ -21,6 +21,7 @@ import {
   EuiTitle,
   EuiEmptyPrompt,
   useGeneratedHtmlId,
+  EuiConfirmModal,
   EuiFilterGroup,
   EuiFilterButton,
   EuiCallOut,
@@ -77,7 +78,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   jsonData,
   refetchMapping,
   showAboutMappings,
-  isSemanticTextEnabled = false,
+  isSemanticTextEnabled = true,
 }) => {
   const {
     services: { extensionsService },
@@ -191,9 +192,24 @@ export const DetailsPageMappingsContent: FunctionComponent<{
     });
   }, [dispatch, isAddingFields, state]);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const closeModal = () => setIsModalVisible(false);
+  const refreshModal = () => setIsModalVisible(true);
+  const showModal = () => setIsModalVisible(true);
+  const modalTitleId = useGeneratedHtmlId();
+
   const updateMappings = useCallback(async () => {
     try {
-      const { error } = await updateIndexMappings(indexName, deNormalize(state.fields));
+      showModal();
+
+      const denormalizedFields = deNormalize(state.fields);
+      const inferenceIds = new Set();
+      for (const field of Object.values(denormalizedFields)) {
+        if (field.type === 'semantic_text' && field.inference_id) {
+          inferenceIds.add(field.inference_id);
+        }
+      }
+      const { error } = await updateIndexMappings(indexName, denormalizedFields);
 
       // const modelsDownloads = await ml.mlApi?.trainedModels.getTrainedModels();
       // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
@@ -520,6 +536,24 @@ export const DetailsPageMappingsContent: FunctionComponent<{
           </EuiFlexItem>
         </EuiFlexGroup>
       </EuiFlexGroup>
+      {isModalVisible && (
+        <EuiConfirmModal
+          aria-labelledby={modalTitleId}
+          style={{ width: 600 }}
+          title="Models still deploying"
+          titleProps={{ id: modalTitleId }}
+          onCancel={closeModal}
+          onConfirm={refreshModal}
+          cancelButtonText="Cancel"
+          confirmButtonText="Refresh"
+          defaultFocusedButton="confirm"
+        >
+          <p>
+            Some fields are referencing models that have not yet completed deployment. Deployment
+            may take a few minutes to complete.
+          </p>
+        </EuiConfirmModal>
+      )}
     </>
   );
 };
