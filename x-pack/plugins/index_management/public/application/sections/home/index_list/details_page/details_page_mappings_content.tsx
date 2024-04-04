@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import React, { FunctionComponent, useCallback, useMemo, useState } from 'react';
+import React, { FunctionComponent, useCallback, useMemo, useState, useEffect } from 'react';
 import {
   EuiAccordion,
   EuiButton,
@@ -55,6 +55,7 @@ import {
   NormalizedFields,
   State,
 } from '../../../../components/mappings_editor/types';
+import { useComponentTemplatesContext } from '../../../../components/component_templates/component_templates_context';
 
 const getFieldsFromState = (state: State) => {
   const getField = (fieldId: string) => {
@@ -198,6 +199,18 @@ export const DetailsPageMappingsContent: FunctionComponent<{
   const showModal = () => setIsModalVisible(true);
   const modalTitleId = useGeneratedHtmlId();
 
+  const { api } = useComponentTemplatesContext();
+
+  const [inferenceModels, setInferenceModels] = useState<any>([]);
+  useEffect(() => {
+    const fetchInferenceModels = async () => {
+      const models = await api.getInferenceModels();
+      setInferenceModels(models);
+    };
+
+    fetchInferenceModels();
+  }, [api]);
+
   const updateMappings = useCallback(async () => {
     try {
       const denormalizedFields = deNormalize(state.fields);
@@ -214,7 +227,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
       const { error } = await updateIndexMappings(indexName, denormalizedFields);
       const modelStats = await ml.mlApi?.trainedModels.getTrainedModelStats();
 
-      const deploymentStatsById =
+      const deploymentStatsByModelId =
         modelStats?.trained_model_stats.reduce<{ [key: string]: string }>((acc, modelStat) => {
           if (modelStat.model_id) {
             acc[modelStat.model_id] =
@@ -222,6 +235,9 @@ export const DetailsPageMappingsContent: FunctionComponent<{
           }
           return acc;
         }, {}) ?? {};
+
+      // console.log('====================');
+      // console.log('inferenceModels', inferenceModels);
 
       if (!error) {
         notificationService.showSuccessToast(
@@ -236,7 +252,7 @@ export const DetailsPageMappingsContent: FunctionComponent<{
     } catch (exception) {
       setSaveMappingError(exception.message);
     }
-  }, [state.fields, indexName, refetchMapping]);
+  }, [state.fields, indexName, refetchMapping, ml.mlApi?.trainedModels]);
 
   const onSearchChange = useCallback(
     (value: string) => {
