@@ -200,8 +200,6 @@ export const DetailsPageMappingsContent: FunctionComponent<{
 
   const updateMappings = useCallback(async () => {
     try {
-      showModal();
-
       const denormalizedFields = deNormalize(state.fields);
       const inferenceIds = new Set();
       for (const field of Object.values(denormalizedFields)) {
@@ -209,10 +207,22 @@ export const DetailsPageMappingsContent: FunctionComponent<{
           inferenceIds.add(field.inference_id);
         }
       }
+      if (inferenceIds.size > 0) {
+        showModal();
+      }
+
       const { error } = await updateIndexMappings(indexName, denormalizedFields);
 
       // const modelsDownloads = await ml.mlApi?.trainedModels.getTrainedModels();
       // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
+      // const modelsDownloads = await ml.mlApi?.trainedModels.startModelAllocation('.elser_model_2');
+      // console.log('===== modelsDownloads from details_page_mappings =====  ', modelsDownloads);
+      // const modelStats = await ml.mlApi?.trainedModels.getTrainedModelStats();
+
+      // const deploymentStates = modelStats?.trained_model_stats.map((modelStat) =>
+      //   modelStat?.deployment_stats?.state === 'started' ? 'started' : 'not_deployed'
+      // );
+      // console.log('===== deploymentStates from details_page_mappings =====  ', deploymentStates);
 
       if (!error) {
         notificationService.showSuccessToast(
